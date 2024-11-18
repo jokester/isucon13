@@ -4,7 +4,8 @@ WORKDIR /tmp
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && \
     apt-get -y upgrade && \
-    apt-get install -y curl wget gcc g++ make sqlite3 locales locales-all && \
+    apt-get install -y curl wget gcc g++ make sqlite3 locales locales-all gnupg && \
+    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys B7B3B788A8D3785C && \
     wget -q https://dev.mysql.com/get/mysql-apt-config_0.8.29-1_all.deb && \
     apt-get -y install ./mysql-apt-config_0.8.29-1_all.deb && \
     apt-get -y update && \

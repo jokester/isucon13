@@ -7,6 +7,10 @@ services:
     build:
       context: ../webapp/node
     init: true
+    command:
+    - bash
+    - -uexc
+    - npm ci ; npm run start
     working_dir: /home/isucon/webapp/node
     container_name: webapp
     volumes:
@@ -15,7 +19,8 @@ services:
       - ../provisioning/ansible/roles/powerdns/files/pdns.conf:/etc/powerdns/pdns.conf:ro
       - ../provisioning/ansible/roles/powerdns/files/pdns.d/docker.conf:/etc/powerdns/pdns.d/docker.conf:ro
       - ../webapp/img:/home/isucon/webapp/img
-      - ../webapp/node/src:/home/isucon/webapp/node/src
+      - ../webapp/node:/home/isucon/webapp/node:ro
+      - node_modules:/home/isucon/webapp/node/node_modules:rw
     environment:
       ISUCON13_MYSQL_DIALCONFIG_ADDRESS: mysql
       ISUCON13_POWERDNS_HOST: powerdns
@@ -26,3 +31,6 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
+volumes:
+  node_modules: {}
+  npm_cache: {}

@@ -206,6 +206,21 @@ app.get(
 // // 課金情報
 app.get('/api/payment', GetPaymentResult)
 
-serve({ ...app, port: 8080 }, (add) =>
+const server = serve({ ...app, port: 8080 }, (add) =>
   console.log(`Listening on http://localhost:${add.port}`),
 )
+
+async function stopServer() {
+  console.log('server closing');
+  server.close();
+  await new Promise<void>((resolve, reject) => server.close(err => {
+    if (err) {
+      console.error(err)
+    }
+    resolve();
+  }))
+  process.exit(0);
+}
+
+process.on('SIGTERM', stopServer)
+process.on('SIGINT', stopServer)
